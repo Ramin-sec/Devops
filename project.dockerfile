@@ -15,7 +15,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     tzdata \
     curl wget git unzip software-properties-common \
-    openjdk-11-jdk python3-pip docker.io \
+    openjdk-11-jdk python3-pip docker.io gnupg\
     && apt-get clean
 
 # Configure time zone to avoid interactive prompts during installation
