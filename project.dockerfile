@@ -1,6 +1,5 @@
-# Base image: Azure CLI with a lightweight Ubuntu distribution
-FROM mcr.microsoft.com/azure-cli:2.52.0
-
+# Base image: Azure CLI with a lightweight Ubuntu distribution-mcr.microsoft.com/azure-cli:2.52.0
+FROM ubuntu:20.04
 # Set environment variables for Azure DevOps agent
 ENV AZP_URL=https://dev.azure.com/RaminEB
 ENV AZP_TOKEN=3ZGS1XLyxTU2wXlrXy71ldl1tBKceXM9ks6mVAeQchvWIErzkwtBJQQJ99AKACAAAAAAAAAAAAASAZDO5BA2
