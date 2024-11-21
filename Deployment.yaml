@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: azdevops-agent
-        image: conrepo.azurecr.io/azp-agent:latest
+        image: conrepo.azurecr.io/img2:latest
         env:
           - name: TenantID
             valueFrom:
