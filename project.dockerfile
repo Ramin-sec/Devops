@@ -1,15 +1,27 @@
 # Base image: Azure CLI with a lightweight Ubuntu distribution-mcr.microsoft.com/azure-cli:2.52.0
 FROM ubuntu:20.04
+
 # Set environment variables for Azure DevOps agent
 ENV AZP_URL=https://dev.azure.com/RaminEB
 ENV AZP_TOKEN=3ZGS1XLyxTU2wXlrXy71ldl1tBKceXM9ks6mVAeQchvWIErzkwtBJQQJ99AKACAAAAAAAAAAAAASAZDO5BA2
 ENV AZP_POOL=CoolPool
 
+# Set the time zone to "Europe/Hamburg" (or whatever time zone you need)
+ENV TZ=Europe/Hamburg
+# Set the environment variable for non-interactive installs
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Install necessary tools and dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    tzdata \
     curl wget git unzip software-properties-common \
-    openjdk-11-jdk python3-pip docker.io \
+    openjdk-11-jdk python3-pip docker.io gnupg\
     && apt-get clean
+
+# Configure time zone to avoid interactive prompts during installation
+RUN echo "$TZ" > /etc/timezone && \
+    ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 
 # Install kubectl
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
