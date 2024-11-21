@@ -1,25 +1,25 @@
 #!/bin/bash
 set -e
 
-if [ -z "${AZP_URL}" ]; then
-  echo 1>&2 "error: missing AZP_URL environment variable"
+if [ -z "${AZP-URL}" ]; then
+  echo 1>&2 "error: missing AZP-URL environment variable"
   exit 1
 fi
 
-if [ -z "${AZP_TOKEN_FILE}" ]; then
-  if [ -z "${AZP_TOKEN}" ]; then
-    echo 1>&2 "error: missing AZP_TOKEN environment variable"
+if [ -z "${AZP-TOKEN-FILE}" ]; then
+  if [ -z "${AZP-TOKEN}" ]; then
+    echo 1>&2 "error: missing AZP-TOKEN environment variable"
     exit 1
   fi
 
-  AZP_TOKEN_FILE="/azp/.token"
-  echo -n "${AZP_TOKEN}" > "${AZP_TOKEN_FILE}"
+  AZP-TOKEN-FILE="/azp/.token"
+  echo -n "${AZP-TOKEN}" > "${AZP-TOKEN-FILE}"
 fi
 
-unset AZP_TOKEN
+unset AZP-TOKEN
 
-if [ -n "${AZP_WORK}" ]; then
-  mkdir -p "${AZP_WORK}"
+if [ -n "${AZP-WORK}" ]; then
+  mkdir -p "${AZP-WORK}"
 fi
 
 cleanup() {
@@ -31,7 +31,7 @@ cleanup() {
     # If the agent has some running jobs, the configuration removal process will fail.
     # So, give it some time to finish the job.
     while true; do
-      ./config.sh remove --unattended --auth "PAT" --token $(cat "${AZP_TOKEN_FILE}") && break
+      ./config.sh remove --unattended --auth "PAT" --token $(cat "${AZP-TOKEN-FILE}") && break
 
       echo "Retrying in 30 seconds..."
       sleep 30
@@ -46,26 +46,26 @@ print_header() {
 }
 
 # Let the agent ignore the token env variables
-export VSO_AGENT_IGNORE="AZP_TOKEN,AZP_TOKEN_FILE"
+export VSO-AGENT-IGNORE="AZP-TOKEN,AZP-TOKEN-FILE"
 
 print_header "1. Determining matching Azure Pipelines agent..."
 
-AZP_AGENT_PACKAGES=$(curl -LsS \
-    -u user:$(cat "${AZP_TOKEN_FILE}") \
+AZP-AGENT-PACKAGES=$(curl -LsS \
+    -u user:$(cat "${AZP-TOKEN-FILE}") \
     -H "Accept:application/json" \
-    "${AZP_URL}/_apis/distributedtask/packages/agent?platform=${TARGETARCH}&top=1")
+    "${AZP-URL}/_apis/distributedtask/packages/agent?platform=${TARGETARCH}&top=1")
 
-AZP_AGENT_PACKAGE_LATEST_URL=$(echo "${AZP_AGENT_PACKAGES}" | jq -r ".value[0].downloadUrl")
+AZP-AGENT-PACKAGE-LATEST-URL=$(echo "${AZP-AGENT-PACKAGES}" | jq -r ".value[0].downloadUrl")
 
-if [ -z "${AZP_AGENT_PACKAGE_LATEST_URL}" -o "${AZP_AGENT_PACKAGE_LATEST_URL}" == "null" ]; then
+if [ -z "${AZP-AGENT-PACKAGE-LATEST-URL}" -o "${AZP-AGENT-PACKAGE-LATEST-URL}" == "null" ]; then
   echo 1>&2 "error: could not determine a matching Azure Pipelines agent"
-  echo 1>&2 "check that account "${AZP_URL}" is correct and the token is valid for that account"
+  echo 1>&2 "check that account "${AZP-URL}" is correct and the token is valid for that account"
   exit 1
 fi
 
 print_header "2. Downloading and extracting Azure Pipelines agent..."
 
-curl -LsS "${AZP_AGENT_PACKAGE_LATEST_URL}" | tar -xz & wait $!
+curl -LsS "${AZP-AGENT-PACKAGE-LATEST-URL}" | tar -xz & wait $!
 
 source ./env.sh
 
@@ -76,12 +76,12 @@ trap "cleanup; exit 143" TERM
 print_header "3. Configuring Azure Pipelines agent..."
 
 ./config.sh --unattended \
-  --agent "${AZP_AGENT_NAME:-$(hostname)}" \
-  --url "${AZP_URL}" \
+  --agent "${AZP-AGENT-NAME:-$(hostname)}" \
+  --url "${AZP-URL}" \
   --auth "PAT" \
-  --token $(cat "${AZP_TOKEN_FILE}") \
-  --pool "${AZP_POOL:-Default}" \
-  --work "${AZP_WORK:-_work}" \
+  --token $(cat "${AZP-TOKEN-FILE}") \
+  --pool "${AZP-POOL:-Default}" \
+  --work "${AZP-WORK:-_work}" \
   --replace \
   --acceptTeeEula & wait $!
 
