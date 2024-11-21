@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azdevops-deployment
+  labels:
+    app: azdevops-agent
+spec:
+  replicas: 1 # You can scale this number based on your requirements
+  selector:
+    matchLabels:
+      app: azdevops-agent
+  template:
+    metadata:
+      labels:
+        app: azdevops-agent
+    spec:
+      containers:
+      - name: kubepodcreation
+        image: conrepo.azurecr.io/azp-agent:latest  # Replace with your ACR registry and tag
+        env:
+          - name: AZP-URL
+            valueFrom:
+              secretKeyRef:
+                name: azdevops  # Secret name
+                key: AZP-URL    # Key within the secret
+          - name: AZP-TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP-TOKEN
+          - name: AZP-POOL
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP-POOL
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-volume
+      volumes:
+      - name: docker-volume
+        hostPath:
+          path: /var/run/docker.sock  # This allows Docker operations inside the container
+      resources:
+        requests:
+          memory: "512Mi"
+          cpu: "500m"
+        limits:
+          memory: "1Gi"
+          cpu: "1"
