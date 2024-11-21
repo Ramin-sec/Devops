@@ -1,0 +1,4 @@
+$AZP_URL="https://dev.azure.com/RaminEB"
+$AZP_TOKEN="3ZGS1XLyxTU2wXlrXy71ldl1tBKceXM9ks6mVAeQchvWIErzkwtBJQQJ99AKACAAAAAAAAAAAAASAZDO5BA2"
+$AZP_POOL="CoolPool"
+$AZP_WORK="_work"
