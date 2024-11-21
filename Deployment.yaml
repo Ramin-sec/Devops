@@ -5,7 +5,7 @@ metadata:
   labels:
     app: azdevops-agent
 spec:
-  replicas: 1 # You can scale this number based on your requirements
+  replicas: 1
   selector:
     matchLabels:
       app: azdevops-agent
@@ -15,35 +15,38 @@ spec:
         app: azdevops-agent
     spec:
       containers:
-      - name: kubepodcreation
-        image: conrepo.azurecr.io/azp-agent:latest  # Replace with your ACR registry and tag
+      - name: azdevops-agent
+        image: conrepo.azurecr.io/azp-agent:latest
         env:
+          - name: TenantID
+            valueFrom:
+              secretKeyRef:
+                name: azp-secrets
+                key: TenantID
+          - name: ClientID
+            valueFrom:
+              secretKeyRef:
+                name: azp-secrets
+                key: ClientID
           - name: AZP-URL
             valueFrom:
               secretKeyRef:
-                name: azdevops  # Secret name
-                key: AZP-URL    # Key within the secret
+                name: azp-secrets
+                key: AZP-URL
           - name: AZP-TOKEN
             valueFrom:
               secretKeyRef:
-                name: azdevops
+                name: azp-secrets
                 key: AZP-TOKEN
           - name: AZP-POOL
             valueFrom:
               secretKeyRef:
-                name: azdevops
+                name: azp-secrets
                 key: AZP-POOL
         volumeMounts:
-        - mountPath: /var/run/docker.sock
-          name: docker-volume
+          - mountPath: /var/run/docker.sock
+            name: docker-volume
       volumes:
-      - name: docker-volume
-        hostPath:
-          path: /var/run/docker.sock  # This allows Docker operations inside the container
-      resources:
-        requests:
-          memory: "512Mi"
-          cpu: "500m"
-        limits:
-          memory: "1Gi"
-          cpu: "1"
+        - name: docker-volume
+          hostPath:
+            path: /var/run/docker.sock
