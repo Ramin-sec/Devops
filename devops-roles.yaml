@@ -1,0 +1,57 @@
+
+#Create ClusterRole and ClusterRoleBinding for Service Account. Update workloadPrincipalId in file
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: devops
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+rules:
+  - apiGroups: ["*"]
+    resources:
+      - statefulsets
+      - services
+      - replicationcontrollers
+      - replicasets
+      - podtemplates
+      - podsecuritypolicies
+      - pods
+      - pods/log
+      - pods/exec
+      - podpreset
+      - poddisruptionbudget
+      - persistentvolumes
+      - persistentvolumeclaims
+      - endpoints
+      - deployments
+      - deployments/scale
+      - daemonsets
+      - configmaps
+      - events
+      - secrets
+    verbs:
+      - create
+      - get
+      - watch
+      - delete
+      - list
+      - patch
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: devops
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: devops
+subjects:
+  - kind: Group
+    apiGroup: rbac.authorization.k8s.io
+    name: system:serviceaccounts:devops
+  - kind: User
+    apiGroup: rbac.authorization.k8s.io
+    name: "f3057ef9-7cbd-49e9-b2a0-c6cbea34d3ee" # Replace with the actual workloadPrincipalId

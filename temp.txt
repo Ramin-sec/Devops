@@ -2,3 +2,21 @@ $AZP_URL="https://dev.azure.com/RaminEB"
 $AZP_TOKEN="3ZGS1XLyxTU2wXlrXy71ldl1tBKceXM9ks6mVAeQchvWIErzkwtBJQQJ99AKACAAAAAAAAAAAAASAZDO5BA2"
 $AZP_POOL="CoolPool"
 $AZP_WORK="_work"
+
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops
+  labels:
+ name: devops
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+ azure.workload.identity/client-id: <insert workloadClientId> # echo $workloadClientId
+  labels:
+ azure.workload.identity/use: "true"
+  name: workload-sa
+  namespace: devops
