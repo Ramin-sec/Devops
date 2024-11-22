@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azdevops-agent
+  labels:
+    app: azdevops-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azdevops-agent
+  template:
+    metadata:
+      labels:
+        app: azdevops-agent
+    spec:
+      containers:
+        - name: azdevops-agent
+          image: conrepo.azurecr.io/img2:latest # Replace with your ACR image path
+          env:
+            - name: AZP-URL
+              valueFrom:
+                secretKeyRef:
+                  name: azp-secrets
+                  key: AZP-URL
+            - name: AZP-TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: azp-secrets
+                  key: AZP-TOKEN
+            - name: AZP-POOL
+              valueFrom:
+                secretKeyRef:
+                  name: azp-secrets
+                  key: AZP-POOL
+      volumes:
+        - name: secret-store
+          csi:
+            driver: secrets-store.csi.x-k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "demo-secret-provider"
