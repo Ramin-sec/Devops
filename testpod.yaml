@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-secret-pod
+spec:
+  containers:
+    - name: test-container
+      image: busybox:1.35
+      command: ['sh', '-c', 'env; sleep 3600']
+      env:
+        - name: AZP-URL
+          valueFrom:
+            secretKeyRef:
+              name: azp-secrets
+              key: AZP-URL
+        - name: AZP-TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: azp-secrets
+              key: AZP-TOKEN
+        - name: AZP-POOL
+          valueFrom:
+            secretKeyRef:
+              name: azp-secrets
+              key: AZP-POOL
+  restartPolicy: Never
