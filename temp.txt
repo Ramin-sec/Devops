@@ -20,3 +20,6 @@ metadata:
  azure.workload.identity/use: "true"
   name: workload-sa
   namespace: devops
+
+
+  
