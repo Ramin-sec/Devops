@@ -21,7 +21,7 @@ spec:
       serviceAccountName: workload-sa
       containers:
       - name: devops-runner
-        image: Conrepo.azurecr.io/agentrunner:v1.0.0 # Add your ACR respository
+        image: Conrepo.azurecr.io/agentrunner:latest # Add your ACR respository
         command:
         - sleep
         args:

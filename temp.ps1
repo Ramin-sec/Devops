@@ -40,15 +40,22 @@ az role assignment create --role "Azure Kubernetes Service Cluster User Role" --
 az role assignment create --role "Azure Kubernetes Service RBAC Writer" --assignee $workloadPrincipalId --scope $aksId/"namespaces/devops"
 az acr build -f Dockerfile.runner -t devops-runner:v1.0.0 -r conrepo -g Automation .
 
+#creating and running acr tasks
 az acr task create --registry $ACR_NAME --name DevopTask3 --image agentrunner:latest --context https://github.com/$GIT_USER/Devops.git --file devoprunner.dockerfile --git-access-token $GIT_PAT 
-
 az acr task run --registry $ACR_NAME --name DevopTask2 
 az acr task list --registry $ACR_NAME  --resource-group automation --output table
 az acr repository list --name $ACR_NAME --output table
 
 #troubleshooting commands
 
-
 kubectl describe node aks-agentpool-15507476-vmss000002
 kubectl describe pod devops-deployment-7dc66f6fc-72hmk -n devops
 kubectl get events -n devops
+az aks scale --name OrkideAKS --resource-group Automation --node-count 2
+kubectl describe pod <pod-name>
+kubectl logs <pod-name>
+kubectl get deployments
+kubectl get pods
+az role assignment create --assignee cbada3d3-cf94-4cf7-8d8f-83859bff6bec --role AcrPull --scope /subscriptions/dd79e1c9-b114-4f67-ba38-70e7a1560dc8/resourceGroups/automation/providers/Microsoft.ContainerRegistry/registries/Conrepo
+
+az acr repository show-tags --name <acr-name> --repository <repository-name> --output table
