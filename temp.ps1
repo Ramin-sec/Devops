@@ -46,3 +46,9 @@ az acr task run --registry $ACR_NAME --name DevopTask2
 az acr task list --registry $ACR_NAME  --resource-group automation --output table
 az acr repository list --name $ACR_NAME --output table
 
+#troubleshooting commands
+
+
+kubectl describe node aks-agentpool-15507476-vmss000002
+kubectl describe pod devops-deployment-7dc66f6fc-72hmk -n devops
+kubectl get events -n devops
