@@ -40,11 +40,9 @@ az role assignment create --role "Azure Kubernetes Service Cluster User Role" --
 az role assignment create --role "Azure Kubernetes Service RBAC Writer" --assignee $workloadPrincipalId --scope $aksId/"namespaces/devops"
 az acr build -f Dockerfile.runner -t devops-runner:v1.0.0 -r conrepo -g Automation .
 
-az acr task create --registry $ACR_NAME --name DevopTask --image agentrunner:latest --context https://github.com/$GIT_USER/Devops.git --file Devoprunner.dockerfile --git-access-token $GIT_PAT 
+az acr task create --registry $ACR_NAME --name DevopTask3 --image agentrunner:latest --context https://github.com/$GIT_USER/Devops.git --file devoprunner.dockerfile --git-access-token $GIT_PAT 
 
-
-
-az acr task run --registry $ACR_NAME --name DevopTask 
+az acr task run --registry $ACR_NAME --name DevopTask2 
 az acr task list --registry $ACR_NAME  --resource-group automation --output table
 az acr repository list --name $ACR_NAME --output table
 
