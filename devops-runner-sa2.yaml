@@ -1,0 +1,18 @@
+
+#Create Kubernetes Service Account in devops namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops
+  labels:
+    name: devops
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    azure.workload.identity/client-id: 65e533dd-106e-48eb-a67e-c97ce4ea3cc6 # Replace with your workloadClientId
+  labels:
+    azure.workload.identity/use: "true"
+  name: workload-sa
+  namespace: devops
