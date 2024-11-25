@@ -51,7 +51,7 @@ az acr repository list --name $ACR_NAME --output table
 kubectl describe node aks-agentpool-15507476-vmss000002
 kubectl describe pod devops-deployment-7dc66f6fc-72hmk -n devops
 kubectl get events -n devops
-az aks scale --name OrkideAKS --resource-group Automation --node-count 2
+az aks scale --name OrkideAKS --resource-group Automation --node-count 1
 kubectl describe pod <pod-name>
 kubectl logs <pod-name>
 kubectl get deployments
