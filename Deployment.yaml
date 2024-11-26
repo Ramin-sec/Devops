@@ -14,18 +14,6 @@ spec:
       env:
       - name: KEYVAULT_URL
         value:  https://treasury.vault.azure.net
-      - name: AZP-POOL
-        value: AZP-POOL
-      - name: AZP-TOKEN
-        value: AZP-TOKEN
-      - name: AZP-URL
-        value: AZP-URL
-      - name: AZP-WORK
-        value: AZP-WORK
-      - name: ClientID
-        value: ClientID
-      - name: TenantID
-        value: TenantID
-
+      
   nodeSelector:
     kubernetes.io/os: linux
