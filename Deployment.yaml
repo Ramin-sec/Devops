@@ -13,18 +13,18 @@ spec:
       name: myimage
       env:
       - name: KEYVAULT_URL
-        value:  https://treasury.vault.azure.ne
-      - name: SECRET_NAME
+        value:  https://treasury.vault.azure.net
+      - name: AZP-POOL
         value: AZP-POOL
-      - name: SECRET_NAME
+      - name: AZP-TOKEN
         value: AZP-TOKEN
-      - name: SECRET_NAME
+      - name: AZP-URL
         value: AZP-URL
-      - name: SECRET_NAME
+      - name: AZP-WORK
         value: AZP-WORK
-      - name: SECRET_NAME
+      - name: ClientID
         value: ClientID
-      - name: SECRET_NAME
+      - name: TenantID
         value: TenantID
 
   nodeSelector:
